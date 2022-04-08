@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import babyNamesData from "./babyNamesData.json";
 import RenderNames from "./RenderNames";
+import Favourites from "./Favourites";
 
 function filterNames(typedValue) {
   return babyNamesData.filter((value) =>
@@ -13,14 +14,23 @@ function App() {
 
   return (
     <div className="App">
-      <input
-        placeholder="Search..."
-        type="text"
-        onKeyUp={(event) => {
-          setArrayOfNames(filterNames(event.target.value));
-        }}
-      ></input>
-      <RenderNames names={arrayOfNames} />
+      <div className="wrapper">
+        <div className="names-container">
+          <input
+          className="search"
+            placeholder="Search for a name..."
+            type="text"
+            onKeyUp={(event) => {
+              setArrayOfNames(filterNames(event.target.value));
+            }}
+          ></input>
+
+          <Favourites />
+          <hr />
+          <RenderNames names={arrayOfNames} />
+          <hr />
+        </div>
+      </div>
     </div>
   );
 }

@@ -6,9 +6,10 @@ function RenderNames(props) {
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((value, index) => {
       return (
-        <p key={index} className={value.sex}>
+        
+        <button key={index} className={value.sex}>
           {value.name}
-        </p>
+        </button>
       );
     });
 }
