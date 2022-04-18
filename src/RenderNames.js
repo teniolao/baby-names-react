@@ -3,7 +3,8 @@ import React from "react";
 function RenderNames(props) {
   return (
     <div>
-      {props.names.sort((a, b) => a.name.localeCompare(b.name))
+      {props.names
+        .sort((a, b) => a.name.localeCompare(b.name))
         .map((value, index) => {
           return (
             <button

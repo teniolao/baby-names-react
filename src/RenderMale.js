@@ -5,6 +5,7 @@ const RenderMale = (props) => {
     <div>
       {props.names
         .sort((a, b) => a.name.localeCompare(b.name))
+        // eslint-disable-next-line array-callback-return
         .map((value, index) => {
           if (value.sex === "m")
             return (
@@ -16,10 +17,10 @@ const RenderMale = (props) => {
               >
                 {value.name}
               </button>
-            );
+            )
         })}
     </div>
-  );
+  )
 };
 
 export default RenderMale;

@@ -5,6 +5,7 @@ const RenderFemale = (props) => {
     <div>
       {props.names
         .sort((a, b) => a.name.localeCompare(b.name))
+        // eslint-disable-next-line array-callback-return
         .map((value, index) => {
           if (value.sex === "f")
             return (
