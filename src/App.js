@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import babyNamesData from "./babyNamesData.json";
 import RenderNames from "./RenderNames";
-import Favourites from "./Favourites";
+
 
 function filterNames(typedValue) {
   return babyNamesData.filter((value) =>
@@ -24,9 +24,6 @@ function App() {
               setArrayOfNames(filterNames(event.target.value));
             }}
           ></input>
-
-          <Favourites />
-          <hr />
           <RenderNames names={arrayOfNames} />
           <hr />
         </div>
