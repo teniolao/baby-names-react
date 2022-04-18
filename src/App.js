@@ -14,25 +14,28 @@ function filterNames(typedValue) {
 
 function App() {
   const [arrayOfNames, setArrayOfNames] = useState(babyNamesData);
-  const [favName, setFaveName] = useState("");
-  const [allNames, setAllNames] = useState(true);
-  const [maleNames, setMaleNames] = useState(false);
-  const [femaleNames, setFemaleNames] = useState(false);
+  const [favName, setFaveName] = useState(""); // view fav name
+  const [allNames, setAllNames] = useState(true); // view all names
+  const [maleNames, setMaleNames] = useState(false); // view male name
+  const [femaleNames, setFemaleNames] = useState(false); // view female name
+  const [message, setMessage] = useState(
+    "Click on a name to add  to Favourites:"
+  ); // change fav message
 
   function RenderAllNames() {
     setAllNames(true);
     setFemaleNames(false);
-     setMaleNames(false);
+    setMaleNames(false);
   }
 
   function RenderMaleNames() {
     setMaleNames((prevState) => !prevState);
-    setAllNames(false)
+    setAllNames(false);
     setFemaleNames(false);
   }
 
   function RenderFemaleNames() {
-    setFemaleNames((prevState) => !prevState );
+    setFemaleNames((prevState) => !prevState);
     setAllNames(false);
     setMaleNames(false);
   }
@@ -40,8 +43,9 @@ function App() {
   function addFavouriteNames(event) {
     setFaveName((setValue) => [
       ...setValue,
-      <button>{event.target.name}</button>
+      <button>{event.target.name}</button>,
     ]);
+    setMessage("Favourites: ");
   }
 
   return (
@@ -65,7 +69,7 @@ function App() {
           <button className="boy-button" onClick={RenderMaleNames}>
             Boys
           </button>
-          <Favourites favName={favName} />
+          <Favourites message={message} favName={favName} />
           <hr />
 
           {allNames && (
