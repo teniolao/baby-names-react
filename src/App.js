@@ -1,52 +1,42 @@
 import React, { useState } from "react";
-import "./App.css";
 import babyNamesData from "./babyNamesData.json";
+import "./App.css";
 import RenderNames from "./RenderNames";
-import Favourites from "./Favourites";
-import RenderMale from "./RenderMale";
-import RenderFemale from "./RenderFemale";
+//import Favourites from "./Favourites";
 
-function filterNames(typedValue) {
-  return babyNamesData.filter((value) =>
-    value.name.toLowerCase().includes(typedValue.toLowerCase())
-  );
-}
+
 
 function App() {
-  const [arrayOfNames, setArrayOfNames] = useState(babyNamesData);
-  const [favName, setFaveName] = useState(""); // view fav name
-  const [allNames, setAllNames] = useState(true); // view all names
-  const [maleNames, setMaleNames] = useState(false); // view male name
-  const [femaleNames, setFemaleNames] = useState(false); // view female name
+  // const [arrayOfNames, setArrayOfNames] = useState(babyNamesData);
+  const [searchTerm, setSearchTerm] = useState(""); // filter search
+  const [faveName, setFaveName] = useState([]); // view fav name
+  const [filterSex, setFilterSex] = useState("all");
   const [message, setMessage] = useState(
-    "Click on a name to add  to Favourites:"
+    "Click on a name to add to Favourites"
   ); // change fav message
 
-  function RenderAllNames() {
-    setAllNames(true);
-    setFemaleNames(false);
-    setMaleNames(false);
-  }
+  const handleChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+  const addFavouriteNames = (clickedName) => {
+    setFaveName([...faveName, clickedName]);
+    setMessage("Click to remove from Favourites ");
+  };
 
-  function RenderMaleNames() {
-    setMaleNames((prevState) => !prevState);
-    setAllNames(false);
-    setFemaleNames(false);
-  }
-
-  function RenderFemaleNames() {
-    setFemaleNames((prevState) => !prevState);
-    setAllNames(false);
-    setMaleNames(false);
-  }
-
-  function addFavouriteNames(event) {
-    setFaveName((setValue) => [
-      ...setValue,
-      <button>{event.target.name}</button>,
-    ]);
-    setMessage("Favourites: ");
-  }
+  const removeFavouriteNames = (clickedName) => {
+    // clickedName is the nameProp passed down from
+    const { id } = clickedName;
+    //console.log(clickedName)
+    setFaveName(
+      faveName.filter((fave) => {
+        if (fave.id !== id) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+    );
+  };
 
   return (
     <div className="App">
@@ -56,42 +46,53 @@ function App() {
             className="search"
             placeholder="Search for a name..."
             type="text"
-            onKeyUp={(event) => {
-              setArrayOfNames(filterNames(event.target.value));
-            }}
+            value={searchTerm}
+            onChange={handleChange}
           ></input>
-          <button onClick={RenderAllNames} className="all-button">
+          <button onClick={() => setFilterSex("all")} className="all-button">
             All
           </button>
-          <button className="girl-button" onClick={RenderFemaleNames}>
+          <button onClick={() => setFilterSex("f")} className="girl-button">
             Girls
           </button>
-          <button className="boy-button" onClick={RenderMaleNames}>
+          <button onClick={() => setFilterSex("m")} className="boy-button">
             Boys
           </button>
-          <Favourites message={message} favName={favName} />
+
+          <div className="fav-container">
+            Favourites:
+            {faveName.map((fave) => (
+              <RenderNames dataSet={fave} handleClick={removeFavouriteNames} />
+            ))}
+          </div>
+          {message}
           <hr />
 
-          {allNames && (
-            <RenderNames
-              names={arrayOfNames}
-              addFavouriteNames={addFavouriteNames}
-            />
-          )}
+          <div>
+            {babyNamesData
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .filter((dataSet) => {
+                const { name, sex, id } = dataSet; // dataSet is the mapped data
 
-          {maleNames && (
-            <RenderMale
-              names={arrayOfNames}
-              addFavouriteNames={addFavouriteNames}
-            />
-          )}
+                const includesNameSearch = name
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase());
+                const faveIds = faveName.map((name) => name.id);
+                const isSelectedAsFave = faveIds.includes(id);
 
-          {femaleNames && (
-            <RenderFemale
-              names={arrayOfNames}
-              addFavouriteNames={addFavouriteNames}
-            />
-          )}
+                const displaySelectedSex =
+                  filterSex === "all" || filterSex === sex;
+                return (
+                  displaySelectedSex && includesNameSearch && !isSelectedAsFave
+                );
+              })
+              .map((dataSet) => (
+                <RenderNames
+                  dataSet={dataSet}
+                  handleClick={addFavouriteNames}
+                />
+              ))}
+          </div>
           <hr />
         </div>
       </div>

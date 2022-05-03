@@ -1,24 +1,13 @@
 import React from "react";
 
-function RenderNames(props) {
+const RenderNames = ({ dataSet, handleClick }) => {
+  // dataSet is the mapped data passed as props to RenderNames
+  const { id, name, sex } = dataSet;
   return (
-    <div>
-      {props.names
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((value, index) => {
-          return (
-            <button
-              name={value.name}
-              key={index}
-              className={value.sex}
-              onClick={props.addFavouriteNames}
-            >
-              {value.name}
-            </button>
-          );
-        })}
-    </div>
+    <button key={id} className={sex} onClick={() => handleClick(dataSet)}>
+      {name}
+    </button>
   );
-}
+};
 
 export default RenderNames;
